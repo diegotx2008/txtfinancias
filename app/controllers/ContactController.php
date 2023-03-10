@@ -6,11 +6,7 @@ class ContactController{
     //métodos exemplos, vou criar os métodos principais
     public function index()
     {
-        var_dump('index contact');
+        echo 'index contact';
     }
 
-    public function store()
-    {
-
-    }
 }

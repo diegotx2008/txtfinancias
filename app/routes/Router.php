@@ -5,22 +5,26 @@ use app\config\Config;
 use app\helpers\Request;
 use app\helpers\Uri;
 
+
+
 class Router{
     
+
     
     public static function load(string $controller, string $method)
     {
       
         try {           
-            $controllerNamespace = Config::CONTROLLER_NAMESPACE.'\\'.$controller;
+            $controllerNamespace = 'app\\controllers\\'.$controller;
+
             //Verificar se o conttroller existe
             if(!class_exists($controllerNamespace)){
-                throw new Exception("O controller {$controller} não existe");
+                throw new Exception("O controller {$controller} não existe ");
             }         
             $controllerInstance = new $controllerNamespace;
 
             //Verificar se o método existe
-            if(!method_exists($controllerInstance,$method)){
+            if(!method_exists($controllerInstance, $method)){
                 throw new Exception("O método {$method} não existe no controller {$controller}!");
             }
             $controllerInstance->$method();
@@ -34,47 +38,59 @@ class Router{
     {   //Utilizando o self:: para chamar o método load
         return [
             'get' => [
-                '/' => fn () => self::load('HomeController', 'index')
+                '/' =>  fn () => self::load('HomeController', 'index'),
+                '/contact' => fn() => self::load('ContactController', 'index')
             ],
 
-            'post' => [
+            'post' =>  fn () =>[
             ],
 
-            'put' => [
+            'put' =>  fn () =>[
             ],
 
-            'delete' => [
+            'delete' =>  fn () =>[
 
             ],
         ] ;
     }
 
+
     public static function execute()
     {
+        $routes = [];
         try {
-            
-            $routes  = Router::routes();
+
+            $routes = self::routes();
             $request = Request::get();
             $uri = Uri::get('path');
 
-            //
+           
+            //var_dump($routes[$uri]);
             if(!isset($routes[$request])){
+                
                 throw new Exception('A rota não existe!');
             }
 
-            var_dump(Request::get());
-            
-            
             if(!array_key_exists($uri, $routes[$request])){
-                throw new Exception('A  <b>rota</b> '.$routes[$request].' ou <b>uri</b> '.$uri.' não existe!');
+
+                if(!isset($routes[$request])){
+                    throw new Exception('A  <b>rota</b> '.$routes[$request]);
+                }elseif(!isset($uri)){
+                    throw new Exception('A  <b>uri</b> '.$uri.' não existe!');
+                }else{
+                    throw new Exception('A  <b>rota</b> '.$routes[$request].' e <b>uri</b> '.$uri.' não existe!');
+                }
+                
             }
 
-            $router = $routes[$request][$uri];
+            var_dump($router = $routes[$request][$uri]);
 
             if (!is_callable($router)) {
                 throw new Exception("A rota {$uri} não pode ser chamada!");
             }
-            $router();
+
+
+
         } catch (\Throwable $th) {
             echo $th->getMessage();
         }

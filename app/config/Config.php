@@ -2,7 +2,7 @@
 namespace app\config;
 class Config{
 
-    public const CONTROLLER_NAMESPACE = 'app\\controllers';
+    public const CONTROLLER_NAMESPACE = __DIR__ .'app\\controllers';
 
 }
 
