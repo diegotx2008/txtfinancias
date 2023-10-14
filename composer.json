@@ -1,0 +1,20 @@
+{
+    "name": "diego/txtfinancias",
+    "description": "Projeto de gestão de financias",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Diego Teixeira de Almeida",
+            "email": "diegotx2008@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "league/plates": "^3.4"
+    }
+}
